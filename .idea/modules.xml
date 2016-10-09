@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/micro-dubbo/micro-dubbo.iml" filepath="$PROJECT_DIR$/micro-dubbo/micro-dubbo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/microservice.iml" filepath="$PROJECT_DIR$/microservice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/micro-core/microservice-core.iml" filepath="$PROJECT_DIR$/micro-core/microservice-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/micro-restful/microservice-restful.iml" filepath="$PROJECT_DIR$/micro-restful/microservice-restful.iml" />
+    </modules>
+  </component>
+</project>
