@@ -11,13 +11,9 @@ public abstract class AbstractValidator implements Validator {
     protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractValidator.class);
 
     public void onEvent(Data event, long sequence, boolean endOfBatch) throws Exception {
-        try {
-            if (event.hasError()) {
-                return;
-            }
-            validate(event);
-        } catch (Exception e) {
-            LOGGER.error("validate",e);
+        if (event.hasError()) {
+            return;
         }
+        validate(event);
     }
 }

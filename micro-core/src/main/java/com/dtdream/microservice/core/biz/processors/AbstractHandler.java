@@ -16,8 +16,6 @@ public abstract class AbstractHandler implements Handler {
                 return;
             }
             handler(event);
-        } catch (Exception e) {
-            LOGGER.error("handler",e);
         } finally {
             event.getResult().setEventCopy(event.clone());
             event.getLatch().countDown();

@@ -9,14 +9,11 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractInitializer implements Initializer {
     protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractInitializer.class);
+
     public void onEvent(Data event, long sequence, boolean endOfBatch) throws Exception {
-        try {
-            if (event.hasError()) {
-                return;
-            }
-            init(event);
-        } catch (Exception e) {
-            LOGGER.error("init",e);
+        if (event.hasError()) {
+            return;
         }
+        init(event);
     }
 }

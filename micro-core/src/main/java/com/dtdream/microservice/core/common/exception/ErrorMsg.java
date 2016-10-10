@@ -9,6 +9,7 @@ public enum ErrorMsg {
     SERVICE_NOT_RUNNING("服务未启动"),
     EXCEED_LIMIT("最多注册3个处理器"),
     SYS_ERROR("系统异常"),
+    PROCESS_WRONG("请使用BizLineUtil.process方法"),
     HANDLER_REGISTED_ALREADY("Handler已注册"),;
     private String msg;
 

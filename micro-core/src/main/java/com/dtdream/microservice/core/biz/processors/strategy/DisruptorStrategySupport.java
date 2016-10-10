@@ -10,6 +10,7 @@ import com.google.common.base.Preconditions;
 import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.EventTranslatorOneArg;
+import com.lmax.disruptor.ExceptionHandler;
 import com.lmax.disruptor.TimeoutException;
 import com.lmax.disruptor.WaitStrategy;
 import com.lmax.disruptor.YieldingWaitStrategy;
@@ -48,6 +49,24 @@ public abstract class DisruptorStrategySupport extends AbstractStrategy {
         } else {
             disruptor.handleEventsWith(hander);
         }
+        disruptor.setDefaultExceptionHandler(new ExceptionHandler<Data>() {
+            @Override
+            public void handleEventException(Throwable ex, long sequence, Data event) {
+                LOGGER.error("", ex);
+                event.setException((Exception) ex);
+                event.getResult().setEventCopy(event.clone());
+            }
+
+            @Override
+            public void handleOnStartException(Throwable ex) {
+                LOGGER.error("", ex);
+            }
+
+            @Override
+            public void handleOnShutdownException(Throwable ex) {
+                LOGGER.error("", ex);
+            }
+        });
         disruptor.start();
     }
 
@@ -66,8 +85,14 @@ public abstract class DisruptorStrategySupport extends AbstractStrategy {
         return result;
     }
 
-    public void close() throws TimeoutException {
-        disruptor.shutdown(10, TimeUnit.SECONDS);
-        executor.shutdown();
+    public synchronized void close() throws TimeoutException {
+        if (disruptor != null) {
+            disruptor.shutdown(10, TimeUnit.SECONDS);
+        }
+        if (executor != null) {
+            executor.shutdown();
+        }
+        disruptor = null;
+        executor = null;
     }
 }

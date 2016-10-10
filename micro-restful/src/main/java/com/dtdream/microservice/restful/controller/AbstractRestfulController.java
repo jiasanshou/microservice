@@ -7,10 +7,12 @@ import com.dtdream.microservice.restful.common.RestfulResult;
 import com.dtdream.microservice.restful.common.exception.RestfulError;
 import com.dtdream.microservice.restful.common.exception.RestfulException;
 import com.google.common.collect.Sets;
+import com.lmax.disruptor.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.annotation.PreDestroy;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Set;
@@ -83,6 +85,15 @@ public abstract class AbstractRestfulController implements RestfulController {
                 break;
             default:
                 throw new RestfulException(RestfulError.UNSUPPORTED_METHOD);
+        }
+    }
+
+    @PreDestroy
+    public void close() {
+        try {
+            BIZ_LINE.close();
+        } catch (TimeoutException e) {
+            LOGGER.error("", e);
         }
     }
 }
