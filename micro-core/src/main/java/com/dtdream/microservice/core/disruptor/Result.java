@@ -5,7 +5,7 @@ import java.util.concurrent.CountDownLatch;
 /**
  * Created by 张三丰 on 2016-09-28.
  */
-public class Result<E extends Data> {
+public final class Result<E extends Data> {
 
     private CountDownLatch latch = new CountDownLatch(1);
     private E eventCopy;

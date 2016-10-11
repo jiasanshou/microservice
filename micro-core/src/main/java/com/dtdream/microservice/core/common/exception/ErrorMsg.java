@@ -11,17 +11,14 @@ public enum ErrorMsg {
     SYS_ERROR("系统异常"),
     PROCESS_WRONG("请使用BizLineUtil.process方法"),
     HANDLER_REGISTED_ALREADY("Handler已注册"),;
-    private String msg;
-
-    ErrorMsg(String msg) {
-        this.msg = msg;
-    }
-
     public String getMsg() {
         return msg;
     }
-
+    private String msg;
     public void setMsg(String msg) {
+        this.msg = msg;
+    }
+    ErrorMsg(String msg) {
         this.msg = msg;
     }
 }

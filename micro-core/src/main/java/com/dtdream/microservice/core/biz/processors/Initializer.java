@@ -6,5 +6,5 @@ import com.dtdream.microservice.core.disruptor.Data;
  * Created by 张三丰 on 2016-09-28.
  */
 public interface Initializer extends AsynProcessor {
-    void init(Data data) throws InterruptedException, Exception;
+    void init(Data data) throws Exception;
 }

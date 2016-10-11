@@ -7,7 +7,6 @@ import com.dtdream.microservice.restful.common.RestfulResult;
 import com.dtdream.microservice.restful.common.exception.RestfulError;
 import com.dtdream.microservice.restful.common.exception.RestfulException;
 import com.google.common.collect.Sets;
-import com.lmax.disruptor.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,13 +21,18 @@ import java.util.Set;
  */
 public abstract class AbstractRestfulController implements RestfulController {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRestfulController.class);
-    private BizLine BIZ_LINE = BizLineUtil.createSameThreadBizLine(new BizLineUtil.SameThreadCallBack() {
+    public static final int PARAM_METHOD = 3;
+    public static final int PARAM_API = 4;
+    public static final int PARAM_RESPONSE = 2;
+    public static final int PARAM_REQUEST = 1;
+    public static final int PARAM_RESULT = 0;
+    private BizLine bizLine = BizLineUtil.createSameThreadBizLine(new BizLineUtil.SameThreadCallBack() {
         public void doInSameThread(Object... params) {
-            RestfulResult param = (RestfulResult) params[0];
-            HttpServletRequest param1 = (HttpServletRequest) params[1];
-            HttpServletResponse param2 = (HttpServletResponse) params[2];
-            RequestMethod param3 = (RequestMethod) params[3];
-            Object param4 = params[4];
+            RestfulResult param = (RestfulResult) params[PARAM_RESULT];
+            HttpServletRequest param1 = (HttpServletRequest) params[PARAM_REQUEST];
+            HttpServletResponse param2 = (HttpServletResponse) params[PARAM_RESPONSE];
+            RequestMethod param3 = (RequestMethod) params[PARAM_METHOD];
+            Object param4 = params[PARAM_API];
             processDirectly(param, param1, param2, param3, (RestfulApi) param4);
         }
     });
@@ -37,8 +41,8 @@ public abstract class AbstractRestfulController implements RestfulController {
 
 //    @PostConstruct
 //    public void init(){
-//        BIZ_LINE.register(new SingleWriterHandler());
-//        BIZ_LINE.start();
+//        bizLine.register(new SingleWriterHandler());
+//        bizLine.start();
 //    }
 
     public RequestMethod[] needSyncMethods() {
@@ -54,7 +58,7 @@ public abstract class AbstractRestfulController implements RestfulController {
         try {
             RestfulApi api = getApi(path);
             if (methods.contains(method)) {
-                BizLineUtil.processInSameThread(BIZ_LINE, result, request, response, method, api);
+                BizLineUtil.processInSameThread(bizLine, result, request, response, method, api);
             } else {
                 processDirectly(result, request, response, method, api);
             }
@@ -90,10 +94,6 @@ public abstract class AbstractRestfulController implements RestfulController {
 
     @PreDestroy
     public void close() {
-        try {
-            BIZ_LINE.close();
-        } catch (TimeoutException e) {
-            LOGGER.error("", e);
-        }
+        bizLine.close();
     }
 }

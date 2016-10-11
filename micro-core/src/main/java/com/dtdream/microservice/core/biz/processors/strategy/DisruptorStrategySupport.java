@@ -26,17 +26,19 @@ import java.util.concurrent.TimeUnit;
  * Created by 张三丰 on 2016-09-30.
  */
 public abstract class DisruptorStrategySupport extends AbstractStrategy {
-    protected Disruptor<Data> disruptor;
-    protected ExecutorService executor;
+    public static final int RING_BUFFER_SIZE = 1024;
+    public static final int WAIT_TIME = 10;
+    private Disruptor<Data> disruptor;
+    private ExecutorService executor;
 
     protected void doStart(List<Initializer> initializers, List<Validator> validators, Handler hander, ProducerType single) {
         WaitStrategy strategy = initializers.isEmpty() && validators.isEmpty() ?
                 new BlockingWaitStrategy() : new YieldingWaitStrategy();
         executor = Executors.newCachedThreadPool();
-        disruptor = new Disruptor<Data>(Data.create(), 1024,
+        disruptor = new Disruptor<Data>(Data.create(), RING_BUFFER_SIZE,
                 executor, single, strategy);
-        EventHandler<Data>[] initHandlers = initializers.toArray(new EventHandler[0]);
-        EventHandler<Data>[] valiHandlers = validators.toArray(new EventHandler[0]);
+        EventHandler<Data>[] initHandlers = initializers.toArray(new EventHandler[initializers.size()]);
+        EventHandler<Data>[] valiHandlers = validators.toArray(new EventHandler[validators.size()]);
         if (hander == null) {
             hander = new EmptyHanlder();
         }
@@ -85,14 +87,26 @@ public abstract class DisruptorStrategySupport extends AbstractStrategy {
         return result;
     }
 
-    public synchronized void close() throws TimeoutException {
+    public synchronized void close() {
         if (disruptor != null) {
-            disruptor.shutdown(10, TimeUnit.SECONDS);
+            try {
+                disruptor.shutdown(WAIT_TIME, TimeUnit.SECONDS);
+            } catch (TimeoutException e) {
+                LOGGER.error("", e);
+            }
         }
         if (executor != null) {
             executor.shutdown();
         }
         disruptor = null;
         executor = null;
+    }
+
+    public Disruptor<Data> getDisruptor() {
+        return disruptor;
+    }
+
+    public ExecutorService getExecutor() {
+        return executor;
     }
 }

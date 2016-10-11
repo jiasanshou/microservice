@@ -4,7 +4,6 @@ import com.dtdream.microservice.core.biz.processors.Handler;
 import com.dtdream.microservice.core.biz.processors.Initializer;
 import com.dtdream.microservice.core.biz.processors.Validator;
 import com.dtdream.microservice.core.disruptor.Data;
-import com.lmax.disruptor.TimeoutException;
 
 import java.util.List;
 
@@ -16,5 +15,5 @@ public interface ProcessStrategy {
 
     void process(final Data data);
 
-    void close() throws TimeoutException;
+    void close();
 }

@@ -10,7 +10,10 @@ import com.dtdream.microservice.core.disruptor.Data;
 /**
  * Created by 张三丰 on 2016-10-09.
  */
-public class BizLineUtil {
+public final class BizLineUtil {
+    private BizLineUtil() {
+    }
+
     public static BizLine createSameThreadBizLine(final SameThreadCallBack callBack) {
         BizLine bizLine = BizLine.create(new MultiInputStrategy());
         bizLine.register(new AbstractHandler() {

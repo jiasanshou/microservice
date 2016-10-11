@@ -28,10 +28,10 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
-      <module name="micro-dubbo" target="1.7" />
-      <module name="microservice" target="1.7" />
-      <module name="microservice-core" target="1.7" />
-      <module name="microservice-restful" target="1.7" />
+      <module name="micro-dubbo" target="1.5" />
+      <module name="microservice" target="1.5" />
+      <module name="microservice-core" target="1.5" />
+      <module name="microservice-restful" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

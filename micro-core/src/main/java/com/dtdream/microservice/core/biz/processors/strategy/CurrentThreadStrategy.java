@@ -5,7 +5,6 @@ import com.dtdream.microservice.core.biz.processors.Initializer;
 import com.dtdream.microservice.core.biz.processors.Validator;
 import com.dtdream.microservice.core.disruptor.Data;
 import com.google.common.base.Preconditions;
-import com.lmax.disruptor.TimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +44,7 @@ public class CurrentThreadStrategy extends AbstractStrategy {
         }
     }
 
-    public void close() throws TimeoutException {
+    public void close() {
 
     }
 }

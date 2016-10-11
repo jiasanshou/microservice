@@ -8,12 +8,9 @@ import com.dtdream.microservice.core.biz.processors.Initializer;
 import com.dtdream.microservice.core.biz.processors.Validator;
 import com.dtdream.microservice.core.biz.processors.strategy.MultiInputStrategy;
 import com.dtdream.microservice.core.biz.processors.strategy.ProcessStrategy;
-import com.dtdream.microservice.core.common.exception.MicroServiceException;
 import com.dtdream.microservice.core.common.exception.ErrorMsg;
+import com.dtdream.microservice.core.common.exception.MicroServiceException;
 import com.dtdream.microservice.core.disruptor.Data;
-import com.lmax.disruptor.TimeoutException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,13 +47,13 @@ import java.util.List;
  * <P>2.start方法只能调用一次，所有处理器必须在start之前注册完毕</P>
  * Created by 张三丰 on 2016-09-28.
  */
-public class BizLine {
+public final class BizLine {
     public static final int PROCESSOR_LIMIT = 3;
     private List<Initializer> initializers = new ArrayList<Initializer>();
     private List<Validator> validators = new ArrayList<Validator>();
     private Handler hander;
     private ProcessStrategy processStrategy;
-    private static final Logger LOGGER = LoggerFactory.getLogger(BizLine.class);
+//    private static final Logger LOGGER = LoggerFactory.getLogger(BizLine.class);
 
     private BizLine(ProcessStrategy processStrategy) {
         this.processStrategy = processStrategy;
@@ -104,7 +101,7 @@ public class BizLine {
         processStrategy.process(data);
     }
 
-    public void close() throws TimeoutException {
+    public void close() {
         processStrategy.close();
     }
 }

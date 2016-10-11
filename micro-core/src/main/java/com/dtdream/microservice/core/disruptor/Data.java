@@ -8,7 +8,7 @@ import java.util.concurrent.CountDownLatch;
 /**
  * Created by 张三丰 on 2016-09-28.
  */
-public class Data extends JSONObject  implements EventFactory<Data> {
+public final class Data extends JSONObject  implements EventFactory<Data>,Cloneable{
 
     private Data() {
     }
